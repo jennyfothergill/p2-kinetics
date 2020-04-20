@@ -3,6 +3,12 @@ import numpy as np
 import requests
 import csv
 
+# For making the plot nicer
+plt.rcParams['figure.figsize'] = [9, 9]
+plt.rcParams['font.size'] = 18
+plt.rcParams['lines.linewidth'] = 4
+plt.rcParams['lines.markersize'] = 10
+
 
 # csv format is date,state,fips,cases,deaths
 url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
@@ -48,12 +54,15 @@ plt.plot(idaho[:,0],idaho[:,2], label="infected people")
 plt.plot(idaho[:,0],idaho[:,3], label="deaths")
 
 event_inds = np.argwhere(idaho[:,4] != "")
-maxplot = max(idaho[:,2])*1.8
+maxcase = max(idaho[:,2])
 for i in event_inds:
-    plt.plot((idaho[i,0],idaho[i,0]), (0,maxplot), "--", label=idaho[i,4][0])
+    plt.plot((idaho[i,0],idaho[i,0]), (0,maxcase), "--", label=idaho[i,4][0])
 
 plt.legend(loc="upper left")
 locs = list(idaho[:,0])[::5]
 labels = ["/".join(i.split("-")[1:]) for i in list(idaho[:,1])[::5]]
 plt.xticks(locs, labels)
+plt.xlabel("date")
+plt.ylabel("people")
+plt.ylim((0,maxcase*1.5))
 plt.show()
