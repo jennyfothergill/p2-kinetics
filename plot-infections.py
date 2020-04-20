@@ -42,12 +42,16 @@ for row in my_list:
                 event = ""
         except IndexError:
             event = ""
+        # 3/13 (day 0) was a Friday
+        # so Sat/Sun will be days 1 and 2 of the "week"
+        # weekend --> 1, weekday --> 0
+        weekend = int(days % 7 == 1 or days % 7 == 2)
 
-        add_row = [days, row[0], int(row[3]), int(row[4]), event]
+        add_row = [days, row[0], int(row[3]), int(row[4]), event, weekend]
         idaho.append(np.array(add_row, dtype=object))
         days += 1
 
-# idaho format is days_since_first_infection,date,cases,deaths,event
+# idaho format is days_since_first_infection,date,cases,deaths,event,weekend?
 idaho = np.array(idaho)
 
 plt.plot(idaho[:,0],idaho[:,2], label="infected people")
