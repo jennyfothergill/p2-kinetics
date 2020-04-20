@@ -1,18 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
+import requests
 
-filename= sys.argv[1]
+url = "https://github.com/nytimes/covid-19-data/blob/master/us-states.csv"
 
-infected= np.loadtxt(filename, skiprows =2, delimiter = ',', usecols=(0,2))
-infected_people= infected[:,1]
-day= infected[:,0]
+with requests.Session() as s:
+    download = s.get(url)
 
-plt.plot(day, infected_people)
-plt.xlabel('Time [days]')
-plt.ylabel('Population infected')
-plt.grid()
-plt.legend()
-plt.show()
+    decoded_content = download.content.decode('utf-8')
 
-
+print(decoded_content)
