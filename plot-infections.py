@@ -3,6 +3,9 @@ import numpy as np
 import requests
 import csv
 
+from kinetics import kinetics, N
+
+
 # For making the plot nicer
 plt.rcParams['figure.figsize'] = [9, 9]
 plt.rcParams['font.size'] = 18
@@ -56,6 +59,7 @@ idaho = np.array(idaho)
 weekend_inds = np.argwhere(idaho[:,5]==1)
 weekday_inds = np.argwhere(idaho[:,5]==0)
 
+
 plt.plot(idaho[weekend_inds,0],idaho[weekend_inds,2], "r.", label="infected")
 plt.plot(idaho[weekend_inds,0],idaho[weekend_inds,3], "k.", label="dead")
 plt.plot(idaho[weekday_inds,0],idaho[weekday_inds,2], "ro")
@@ -76,5 +80,18 @@ labels = ["/".join(i.split("-")[1:]) for i in list(idaho[:,1])[::5]]
 plt.xticks(locs, labels)
 plt.xlabel("date")
 plt.ylabel("people")
+plt.ylim((-10,maxcase*1.5))
+plt.show()
+
+
+model = kinetics(0.5,0.02, N-2,1,0)
+
+plt.plot(idaho[:,0],idaho[:,2], "r.", label="infected")
+plt.plot(model.t, model.y[0], "-",  label='(model) susceptible')
+plt.plot(model.t, model.y[1], "--", label='(model) infected')
+plt.plot(model.t, model.y[2], ":", label='(model) recovered')
+plt.xlabel("days")
+plt.ylabel("people")
+plt.legend()
 plt.ylim((-10,maxcase*1.5))
 plt.show()
