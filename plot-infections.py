@@ -53,20 +53,28 @@ for row in my_list:
 
 # idaho format is days_since_first_infection,date,cases,deaths,event,weekend?
 idaho = np.array(idaho)
+weekend_inds = np.argwhere(idaho[:,5]==1)
+weekday_inds = np.argwhere(idaho[:,5]==0)
 
-plt.plot(idaho[:,0],idaho[:,2], label="infected people")
-plt.plot(idaho[:,0],idaho[:,3], label="deaths")
+plt.plot(idaho[weekend_inds,0],idaho[weekend_inds,2], "r.", label="infected")
+plt.plot(idaho[weekend_inds,0],idaho[weekend_inds,3], "k.", label="dead")
+plt.plot(idaho[weekday_inds,0],idaho[weekday_inds,2], "ro")
+plt.plot(idaho[weekday_inds,0],idaho[weekday_inds,3], "ko")
 
 event_inds = np.argwhere(idaho[:,4] != "")
 maxcase = max(idaho[:,2])
 for i in event_inds:
     plt.plot((idaho[i,0],idaho[i,0]), (0,maxcase), "--", label=idaho[i,4][0])
 
-plt.legend(loc="upper left")
+plt.legend(
+        title="small dots indicate weekend\nlarger dots are weekdays",
+        loc="upper left",
+        fontsize=14
+        )
 locs = list(idaho[:,0])[::5]
 labels = ["/".join(i.split("-")[1:]) for i in list(idaho[:,1])[::5]]
 plt.xticks(locs, labels)
 plt.xlabel("date")
 plt.ylabel("people")
-plt.ylim((0,maxcase*1.5))
+plt.ylim((-10,maxcase*1.5))
 plt.show()
