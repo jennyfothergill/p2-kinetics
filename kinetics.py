@@ -17,7 +17,11 @@ def kinetics(k1, k2, S_0, I_0, R_0):  # Units of k1
         """
         # Susceptible, Infected, Recovered
         S, I, R = y
-        return [-k1 * S * I / (S + I + R), k1 * S * I / (S + I + R) - k2 * I, k2 * I]
+        return [
+                -k1 * S * I / (S + I + R),
+                k1 * S * I / (S + I + R) - k2 * I,
+                k2 * I
+                ]
 
     return solve_ivp(
         abc,
