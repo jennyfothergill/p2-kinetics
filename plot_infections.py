@@ -6,8 +6,8 @@ import csv
 from kinetics import solve_sir, N
 
 
-def mse(y1, y2):
-    """Get the mean squared error between the y-value of two datasets
+def rmse(y1, y2):
+    """Get the root mean squared error between the y-value of two datasets
 
     Parameters
     ----------
@@ -17,9 +17,9 @@ def mse(y1, y2):
     Returns
     -------
     float
-        Mean squared error between y1 and y2
+        Root mean squared error between y1 and y2
     """
-    return np.mean(np.square(np.subtract(y1, y2)))
+    return np.sqrt(np.mean(np.square(np.subtract(y1, y2))))
 
 
 if __name__ == "__main__":
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     plt.ylim((-10, maxcase * 1.5))
     plt.show()
 
-    # mses = []
+    # rmses = []
     # k1_start = 0
     # k1_stop = 1
     # k2_start = 0
@@ -109,12 +109,12 @@ if __name__ == "__main__":
     # for k1 in k1s:
     #    for k2 in k2s:
     #        model = solve_sir(k1, k2, N - 2, 2, 0, maxday=max(idaho[:,0]))
-    #        mses.append((mse(model.y[1],idaho[:, 2]), k1, k2))
+    #        rmses.append((rmse(model.y[1],idaho[:, 2]), k1, k2))
 
-    # mses = np.array(mses)
-    # mse_best = mses[:,0].min()
-    # best_row = np.argwhere(mses[:,0]==mse_best)[0][0]
-    # k1_best, k2_best = mses[best_row,1:]
+    # rmses = np.array(rmses)
+    # rmse_best = rmses[:,0].min()
+    # best_row = np.argwhere(rmses[:,0]==rmse_best)[0][0]
+    # k1_best, k2_best = rmses[best_row,1:]
 
     # model = solve_sir(k1_best, k2_best, N - 2, 2, 0, maxday=max(idaho[:,0]))
 
@@ -135,12 +135,15 @@ if __name__ == "__main__":
     print(f"\tmodel 1: {max(model1.y[1]):.0f}")
     print(f"\tmodel 2: {max(model2.y[1]):.0f}")
 
-    mse1 = mse(model1.y[1][:switchday], idaho[:switchday, 0])
+    mean = np.mean(idaho[:,2])
+    rmse1 = rmse(model1.y[1][:switchday], idaho[:switchday, 0])
+    nrmse1 = rmse1/np.mean(idaho[:switchday,2])
     maxday = idaho[-1, 0]
-    mse2 = mse(model2.y[1][switchday : maxday + 1], idaho[switchday:, 0])
+    rmse2 = rmse(model2.y[1][switchday : maxday + 1], idaho[switchday:, 0])/mean
+    nrmse2 = rmse2/np.mean(idaho[switchday:,2])
 
-    print("\nMSE")
-    print(f"\tmodel 1: {mse1:.3f}\n\tmodel 2: {mse2:.3f}")
+    print("\nNormalized RMSE")
+    print(f"\tmodel 1: {nrmse1:.3f}\n\tmodel 2: {nrmse2:.3f}")
 
     plt.plot(idaho[:, 0], idaho[:, 2], "r.", label="(data) infected")
 
