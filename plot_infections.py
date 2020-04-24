@@ -24,8 +24,8 @@ def rmse(y1, y2):
 
 if __name__ == "__main__":
     # For making the plot nicer
-    plt.rcParams["figure.figsize"] = [9, 9]
-    plt.rcParams["font.size"] = 18
+    plt.rcParams["figure.figsize"] = [18, 7]
+    plt.rcParams["font.size"] = 12
     plt.rcParams["lines.linewidth"] = 4
     plt.rcParams["lines.markersize"] = 10
 
@@ -75,28 +75,31 @@ if __name__ == "__main__":
     weekend_inds = np.argwhere(idaho[:, 5] == 1)
     weekday_inds = np.argwhere(idaho[:, 5] == 0)
 
-    plt.plot(idaho[weekend_inds, 0], idaho[weekend_inds, 2], "r.", label="infected")
-    plt.plot(idaho[weekend_inds, 0], idaho[weekend_inds, 3], "k.", label="dead")
-    plt.plot(idaho[weekday_inds, 0], idaho[weekday_inds, 2], "ro")
-    plt.plot(idaho[weekday_inds, 0], idaho[weekday_inds, 3], "ko")
+    fig, ax = plt.subplots(1,2)
+    ax1 = ax[0]
+    ax2 = ax[1]
+
+    ax1.plot(idaho[weekend_inds, 0], idaho[weekend_inds, 2], "r.", label="infected")
+    ax1.plot(idaho[weekend_inds, 0], idaho[weekend_inds, 3], "k.", label="dead")
+    ax1.plot(idaho[weekday_inds, 0], idaho[weekday_inds, 2], "ro")
+    ax1.plot(idaho[weekday_inds, 0], idaho[weekday_inds, 3], "ko")
 
     event_inds = np.argwhere(idaho[:, 4] != "")
     maxcase = max(idaho[:, 2])
     for i in event_inds:
-        plt.plot((idaho[i, 0], idaho[i, 0]), (0, maxcase), "--", label=idaho[i, 4][0])
+        ax1.plot((idaho[i, 0], idaho[i, 0]), (0, maxcase), "--", label=idaho[i, 4][0])
 
-    plt.legend(
+    ax1.legend(
         title="small dots indicate weekend\nlarger dots are weekdays",
         loc="upper left",
-        fontsize=14,
     )
     locs = list(idaho[:, 0])[::5]
     labels = ["/".join(i.split("-")[1:]) for i in list(idaho[:, 1])[::5]]
-    plt.xticks(locs, labels)
-    plt.xlabel("date")
-    plt.ylabel("people")
-    plt.ylim((-10, maxcase * 1.5))
-    plt.show()
+    ax1.set_xticks(locs)
+    ax1.set_xticklabels(labels)
+    ax1.set_xlabel("date")
+    ax1.set_ylabel("people")
+    ax1.set_ylim((-10, maxcase * 1.5))
 
     # rmses = []
     # k1_start = 0
@@ -145,24 +148,25 @@ if __name__ == "__main__":
     print("\nNormalized RMSE")
     print(f"\tmodel 1: {nrmse1:.3f}\n\tmodel 2: {nrmse2:.3f}")
 
-    plt.plot(idaho[:, 0], idaho[:, 2], "r.", label="(data) infected")
+    ax2.plot(idaho[:, 0], idaho[:, 2], "r.", label="(data) infected")
 
-    plt.plot(
+    ax2.plot(
         model1.t[:switchday],
         model1.y[1][:switchday],
         "--",
         label=f"(model) infected\nk1 = {k1_1} k2={k2_1}",
     )
 
-    plt.plot(
+    ax2.plot(
         model2.t + switchday,
         model2.y[1],
         "--",
         label=f"(model) infected\nk1 = {k1_2} k2={k2_2}",
     )
 
-    plt.xlabel("days")
-    plt.ylabel("people")
-    plt.legend()
-    plt.ylim((-10, maxcase * 1.5))
+    ax2.set_xlabel("days")
+    ax2.set_ylabel("people")
+    ax2.legend()
+    ax2.set_ylim((-10, maxcase * 1.5))
+
     plt.show()
