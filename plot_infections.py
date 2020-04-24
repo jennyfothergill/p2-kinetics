@@ -93,6 +93,7 @@ if __name__ == "__main__":
         title="small dots indicate weekend\nlarger dots are weekdays",
         loc="upper left",
     )
+    ax1.set_title("Idaho COVID-19 data shown with relevant events")
     locs = list(idaho[:, 0])[::5]
     labels = ["/".join(i.split("-")[1:]) for i in list(idaho[:, 1])[::5]]
     ax1.set_xticks(locs)
@@ -168,5 +169,6 @@ if __name__ == "__main__":
     ax2.set_ylabel("people")
     ax2.legend()
     ax2.set_ylim((-10, maxcase * 1.5))
+    ax2.set_title("Idaho COVID-19 cases alongside SIR model")
 
     plt.show()
