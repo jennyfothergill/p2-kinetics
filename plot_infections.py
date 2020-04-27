@@ -86,9 +86,9 @@ if __name__ == "__main__":
 
     event_inds = np.argwhere(idaho[:, 4] != "")
     maxcase = max(idaho[:, 2])
-    for i in event_inds:
-        ax1.plot((idaho[i, 0], idaho[i, 0]), (0, maxcase), "--", label=idaho[i, 4][0])
-
+    colors = ["aquamarine", "thistle", "lightblue", "pink"]
+    for i,ind in enumerate(event_inds):
+        ax1.plot((idaho[ind, 0], idaho[ind, 0]), (0, maxcase), "--", label=idaho[ind, 4][0], color=colors[i])
     ax1.legend(
         title="small dots indicate weekend\nlarger dots are weekdays",
         loc="upper left",
