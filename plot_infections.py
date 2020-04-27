@@ -135,6 +135,8 @@ if __name__ == "__main__":
 
     model2 = solve_sir(k1_2, k2_2, N - idaho[switchday, 2], idaho[switchday, 2], 0)
 
+    print("The stats below relate to the rightmost plot.\n")
+    print(f"The day that the model parameters switch is day {switchday}.\n")
     print("Predicted maximum number of infected people:")
     print(f"\tmodel 1: {max(model1.y[1]):.0f}")
     print(f"\tmodel 2: {max(model2.y[1]):.0f}")
@@ -146,7 +148,7 @@ if __name__ == "__main__":
     rmse2 = rmse(model2.y[1][switchday : maxday + 1], idaho[switchday:, 0])/mean
     nrmse2 = rmse2/np.mean(idaho[switchday:,2])
 
-    print("\nNormalized RMSE")
+    print("\nNormalized RMSE:")
     print(f"\tmodel 1: {nrmse1:.3f}\n\tmodel 2: {nrmse2:.3f}")
 
     ax2.plot(idaho[:, 0], idaho[:, 2], "r.", label="(data) infected")
